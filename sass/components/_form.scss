@@ -1,0 +1,119 @@
+.form {
+  &__group:not(:last-child) {
+    margin-bottom: 2rem;
+  }
+
+  &__input {
+    font-size: 1.5rem;
+    // input的字体和字色，浏览器不会自动设置
+    font-family: inherit;
+    color: inherit;
+    // 左右通常比上下的padding大一点
+    padding: 1.5rem 2rem;
+    border-radius: 2px;
+    background-color: rgba($color-white, 0.5);
+    border: none;
+    width: 90%;
+    display: block;
+    // 防止focus的时候盒子变高，产生位移
+    border-bottom: 3px solid transparent;
+    // border-bottom颜色变化的动画
+    transition: all 0.3s;
+
+    @include respond(tab-port) {
+      width: 100%;
+    }
+
+    &:focus {
+      outline: none;
+      // outline取消之后，必须添加其他样式以增加可用性
+      box-shadow: 0rem 1rem 2rem rgba($color-black, 0.1);
+      border-bottom: 3px solid $color-primary;
+
+      &:invalid {
+        // 利用浏览器的校验，改变颜色
+        border-bottom: 3px solid $color-secondary-dark;
+      }
+    }
+
+    // 改变placeholder的字体颜色，chrome、firefox有效
+    &::-webkit-input-placeholder {
+      color: $color-grey-dark-2;
+    }
+  }
+
+  &__label {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-left: 2rem;
+    margin-top: 0.7rem;
+    display: block;
+    transition: all 0.3s;
+  }
+
+  // adjacent sibling:紧邻其后的同级元素
+  // ~符号可以选择到有间隔的同级元素
+  // 如果是label在前，input在后，没有选择器可以实现
+  &__input:placeholder-shown + &__label {
+    visibility: hidden;
+    // 添加动画，而不是只隐藏
+    opacity: 0;
+    transform: translateY(-4rem);
+  }
+
+  &__radio-group {
+    display: inline-block;
+    width: 49%;
+
+    // 改成并排
+    @include respond(tab-port) {
+      width: 100%;
+      margin-bottom: 2rem;
+    }
+  }
+
+  &__radio-input {
+    display: none;
+  }
+
+  &__radio-label {
+    font-size: $default-font-size;
+    color: inherit;
+    // 鼠标改成手
+    cursor: pointer;
+    position: relative;
+    padding-left: 5rem;
+  }
+
+  &__radio-button {
+    width: 3rem;
+    height: 3rem;
+    border: 5px solid $color-primary;
+    border-radius: 50%;
+    display: inline-block;
+    position: absolute;
+    left: 0;
+    top: -0.4rem;
+
+    &::after {
+      // 伪元素 pseudo element，必须定义content和display
+      content: "";
+      display: block;
+      width: 1.3rem;
+      height: 1.3rem;
+      border-radius: 50%;
+      background-color: $color-primary;
+      // 相对于radio-button居中
+      @include absCenter;
+      // 先隐藏，选中之后再显示
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+  }
+
+  // 选中被checked的radio同级的、后面的label的子元素button的after伪类
+  // checked可以用作radio和checkbox
+  &__radio-input:checked ~ &__radio-label &__radio-button::after {
+    opacity: 1;
+  }
+}
