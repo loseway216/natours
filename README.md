@@ -1,6 +1,6 @@
 # Natours
 
-a static page using Sass
+a responsive page using Sass
 
 - Sass
 
